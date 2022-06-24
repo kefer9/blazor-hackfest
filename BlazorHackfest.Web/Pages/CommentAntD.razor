@@ -1,0 +1,36 @@
+﻿@page "/comments-antd"
+@using Comment = BlazorHackfest.Web.Models.Comment
+@inject HttpClient Http
+<link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" />
+
+
+<h1>Stuart is better than Alan</h1>
+
+<p>This component demonstrates fetching comments from a json api and render the data in an ant design table.</p>
+
+<Space>
+    <SpaceItem>
+        <Button OnClick="LoadData">Load data</Button>
+    </SpaceItem>
+</Space>
+
+<Table DataSource="_data" ScrollY="500px" @bind-PageSize="pageSize" EnableVirtualization>
+    <Column @bind-Field="@context.PostId" Width="100" Sortable/>
+    <Column @bind-Field="@context.Id" Width="100" Sortable/>
+    <Column @bind-Field="@context.Name" Width="200" Sortable/>
+    <Column @bind-Field="@context.Email" Width="200"Sortable/>
+    <Column @bind-Field="@context.Body" />
+</Table>
+
+@code {
+    
+
+    Comment[] _data = Array.Empty<Comment>();
+
+    int pageSize = 10000;
+
+    async Task LoadData()
+    {
+        _data = await Http.GetFromJsonAsync<Comment[]>("https://jsonplaceholder.typicode.com/comments");
+    }
+}

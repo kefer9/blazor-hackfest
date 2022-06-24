@@ -1,0 +1,52 @@
+﻿@page "/comments"
+@using BlazorHackfest.Web.Models
+@using Comment = BlazorHackfest.Web.Models.Comment
+@inject HttpClient Http
+
+<PageTitle>Comments</PageTitle>
+
+<h1>Stuart is better than Alan</h1>
+
+<p>This component demonstrates fetching comments from a json api and render the data in an ant design table.</p>
+
+@if (_comments == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>PostId</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Body</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var comment in _comments)
+        {
+            <tr>
+                <td>@comment.PostId</td>
+                <td>@comment.Id</td>
+                <td>@comment.Name</td>
+                <td>@comment.Email</td>
+                <td>@comment.Body</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Comment[]? _comments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _comments = await Http.GetFromJsonAsync<Comment[]>("https://jsonplaceholder.typicode.com/comments");
+    }
+}
